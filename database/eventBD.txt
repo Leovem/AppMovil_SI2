@@ -1,21 +1,75 @@
-ifconfig
-programación en la Shell
--e fecha de caducidad
--r 
--n mínimo numero de días para que el usuario cambie su contraseña
+-- Tabla Usuarios
+CREATE TABLE Usuarios (
+    idusuario SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+);
 
-rwx 
-pwd para saber donde estamos
-rm -r munu.sh para borrar
+-- Tabla Roles
+CREATE TABLE Roles (
+    id_rol SERIAL PRIMARY KEY,  
+    nombre_rol VARCHAR(50) NOT NULL
+);
 
-ssh
-ftp
-DNS
-http
-tehet
-backdoors
+-- Tabla Usuario_Rol (relación muchos a muchos entre Usuarios y Roles)
+CREATE TABLE Usuario_Rol (
+    idusuario INT,
+    id_rol INT,
+    PRIMARY KEY (idusuario, id_rol),
+    FOREIGN KEY (idusuario) REFERENCES Usuarios(idusuario) ON DELETE CASCADE,
+    FOREIGN KEY (id_rol) REFERENCES Roles(id_rol) ON DELETE CASCADE
+);
 
-instalar nmap
-yum install nmap
-nmap -p 20,21,22,23,80,443 udabol.edu.bo
-programa cain y Abel
+-- Tabla Tareas
+CREATE TABLE Tareas (
+    id_tarea SERIAL PRIMARY KEY,
+    descripcion TEXT NOT NULL,
+    fecha_inicio DATE NOT NULL,
+    fecha_final DATE NOT NULL,
+    estado VARCHAR(20) CHECK (estado IN ('Pendiente', 'En Progreso', 'Completa')) NOT NULL,
+    idusuario INT,
+    id_evento INT,
+    FOREIGN KEY (idusuario) REFERENCES Usuarios(idusuario) ON DELETE SET NULL,
+    FOREIGN KEY (id_evento) REFERENCES Eventos(id_evento) ON DELETE SET NULL
+);
+
+-- Tabla Eventos
+CREATE TABLE Eventos (
+    id_evento SERIAL PRIMARY KEY,
+    nombre_evento VARCHAR(100) NOT NULL,
+    fecha_evento DATE NOT NULL,
+    lugar VARCHAR(255) NOT NULL,
+    id_cliente INT,
+    id_proveedor INT,
+    FOREIGN KEY (id_cliente) REFERENCES Clientes(id_cliente) ON DELETE SET NULL,
+    FOREIGN KEY (id_proveedor) REFERENCES Proveedores(id_proveedor) ON DELETE SET NULL
+);
+
+-- Tabla Clientes
+CREATE TABLE Clientes (
+    id_cliente SERIAL PRIMARY KEY,
+    nombre_cliente VARCHAR(100) NOT NULL,
+    telefono VARCHAR(15),
+    email VARCHAR(100) NOT NULL
+);
+
+-- Tabla Proveedores
+CREATE TABLE Proveedores (
+    id_proveedor SERIAL PRIMARY KEY,
+    nombre_proveedor VARCHAR(100) NOT NULL,
+    direccion VARCHAR(255) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    telefono VARCHAR(15) NOT NULL
+);
+
+-- Tabla Bitacora
+CREATE TABLE Bitacora (
+    id_bitacora SERIAL PRIMARY KEY,
+    accion TEXT NOT NULL,
+    fecha_hora TIMESTAMP NOT NULL,
+    idusuario INT,
+    descripcion TEXT,
+    FOREIGN KEY (idusuario) REFERENCES Usuarios(idusuario) ON DELETE SET NULL
+);
+
