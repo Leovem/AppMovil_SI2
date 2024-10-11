@@ -1,0 +1,21 @@
+ifconfig
+programación en la Shell
+-e fecha de caducidad
+-r 
+-n mínimo numero de días para que el usuario cambie su contraseña
+
+rwx 
+pwd para saber donde estamos
+rm -r munu.sh para borrar
+
+ssh
+ftp
+DNS
+http
+tehet
+backdoors
+
+instalar nmap
+yum install nmap
+nmap -p 20,21,22,23,80,443 udabol.edu.bo
+programa cain y Abel
